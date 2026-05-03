@@ -31,13 +31,11 @@ const getTasks = async (req, res) => {
     const { projectId, status } = req.query;
     let query = {};
 
-    // For non-admins, optionally only show tasks assigned to them or in their projects
-    // For simplicity, let's just use the query filters
     if (projectId) query.project = projectId;
     if (status) query.status = status;
 
-    // If user is just a member, they MUST only see tasks assigned to them 
-    if (req.user.role === 'Member') {
+    // Restrict members to view only their assigned tasks
+    if (req.user.role !== 'Admin') {
       query.assignee = req.user.id;
     }
 

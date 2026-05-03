@@ -16,12 +16,13 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'Please fill in all fields' });
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|in|co\.uk|io)$/i;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Please provide a valid email format' });
     }
 
-    // Catch common typos like writing gmail.co instead of gmail.com
+    // Check for common typo in domain
     if (email.toLowerCase().endsWith('@gmail.co')) {
       return res.status(400).json({ message: 'Did you mean @gmail.com? Please check your email.' });
     }
